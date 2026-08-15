@@ -1,0 +1,375 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Secure File App</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #07111f;
+            color: white;
+        }
+
+        /* Navigation */
+        nav {
+            width: 100%;
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #091827;
+            border-bottom: 1px solid #17314a;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #35d9ff;
+        }
+
+        .nav-buttons a {
+            text-decoration: none;
+            color: white;
+            padding: 10px 18px;
+            margin-left: 8px;
+            border-radius: 8px;
+            border: 1px solid #35d9ff;
+        }
+
+        .nav-buttons a:hover {
+            background: #35d9ff;
+            color: #07111f;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            padding: 70px 8%;
+        }
+
+        .hero-text {
+            max-width: 600px;
+        }
+
+        .hero-text h1 {
+            font-size: 52px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .hero-text h1 span {
+            color: #35d9ff;
+        }
+
+        .hero-text p {
+            color: #b7c8d9;
+            font-size: 18px;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        .main-button {
+            display: inline-block;
+            text-decoration: none;
+            background: #35d9ff;
+            color: #07111f;
+            padding: 14px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .main-button:hover {
+            transform: scale(1.05);
+        }
+
+        .hero img {
+            width: 430px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 25px;
+            border: 1px solid #35d9ff;
+            box-shadow: 0 0 35px rgba(53, 217, 255, 0.20);
+        }
+
+        /* Sections */
+        .section {
+            padding: 70px 8%;
+            text-align: center;
+        }
+
+        .section h2 {
+            font-size: 35px;
+            margin-bottom: 15px;
+            color: #35d9ff;
+        }
+
+        .section-intro {
+            color: #b7c8d9;
+            margin-bottom: 40px;
+        }
+
+        /* Cards */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .card {
+            background: #0c1d2e;
+            padding: 30px;
+            border-radius: 18px;
+            border: 1px solid #173c55;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: #35d9ff;
+            box-shadow: 0 0 25px rgba(53, 217, 255, 0.12);
+        }
+
+        .card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            margin-bottom: 12px;
+            color: #35d9ff;
+        }
+
+        .card p {
+            color: #b7c8d9;
+            line-height: 1.6;
+        }
+
+        /* How to use */
+        .steps {
+            max-width: 800px;
+            margin: auto;
+            text-align: left;
+        }
+
+        .step {
+            background: #0c1d2e;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #35d9ff;
+            border-radius: 8px;
+        }
+
+        .step strong {
+            color: #35d9ff;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: #050d17;
+            color: #8297aa;
+            margin-top: 40px;
+        }
+
+        /* Mobile */
+        @media (max-width: 800px) {
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-text h1 {
+                font-size: 38px;
+            }
+
+            .hero img {
+                width: 100%;
+                height: 250px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">🔐 Secure File App</div>
+
+        <div class="nav-buttons">
+            <a href="/account/login/">Login</a>
+            <a href="/account/register/">Register</a>
+        </div>
+    </nav>
+
+
+    <!-- Hero Section -->
+    <section class="hero">
+
+        <div class="hero-text">
+
+            <h1>
+                Protect Your
+                <span>Digital Files</span>
+            </h1>
+
+            <p>
+                Secure your important images, videos and files with
+                automatic password protection. Upload your file,
+                protect it and keep your data private.
+            </p>
+
+            <a class="main-button" href="/account/register/">
+                Get Started 🔐
+            </a>
+
+        </div>
+
+        <!-- PHOTO 1 -->
+        <img src="{% static 'images/photo1.jpg' %}"
+             alt="File Security">
+
+    </section>
+
+
+    <!-- How it works -->
+    <section class="section">
+
+        <h2>How It Works</h2>
+
+        <p class="section-intro">
+            Simple protection for your important digital files.
+        </p>
+
+        <div class="cards">
+
+            <!-- PHOTO 2 -->
+            <div class="card">
+
+                <img src="{% static 'images/photo2.jpg' %}"
+                     alt="Upload Files">
+
+                <h3>📁 Upload</h3>
+
+                <p>
+                    Upload your important image, video or file
+                    to the secure system.
+                </p>
+
+            </div>
+
+
+            <!-- PHOTO 3 -->
+            <div class="card">
+
+                <img src="{% static 'images/photo3.jpg' %}"
+                     alt="Automatic Password">
+
+                <h3>🔑 Automatic Password</h3>
+
+                <p>
+                    Our system can generate a strong password
+                    to protect your uploaded file.
+                </p>
+
+            </div>
+
+
+            <!-- PHOTO 4 -->
+            <div class="card">
+
+                <img src="{% static 'images/photo4.jpg' %}"
+                     alt="Secure File">
+
+                <h3>🛡️ Protected File</h3>
+
+                <p>
+                    Your protected file can be shared while
+                    keeping the original data secure.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Instructions -->
+    <section class="section">
+
+        <h2>How To Use</h2>
+
+        <p class="section-intro">
+            Follow these simple steps.
+        </p>
+
+        <div class="steps">
+
+            <div class="step">
+                <strong>01 — Create Account</strong><br>
+                Register using your User ID and password.
+            </div>
+
+            <div class="step">
+                <strong>02 — Login</strong><br>
+                Login to your secure account.
+            </div>
+
+            <div class="step">
+                <strong>03 — Upload File</strong><br>
+                Select the image, video or file you want to protect.
+            </div>
+
+            <div class="step">
+                <strong>04 — Generate Password</strong><br>
+                Generate a strong automatic password for your file.
+            </div>
+
+            <div class="step">
+                <strong>05 — Share Securely</strong><br>
+                Share the protected file and provide the password
+                separately to the intended person.
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Footer -->
+    <footer>
+        © 2026 Secure File App — Your Files, Your Privacy 🔐
+    </footer>
+
+</body>
+</html>

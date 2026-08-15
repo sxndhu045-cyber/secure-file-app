@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Upload File | Secure File App</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #07111f;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 650px;
+            background: #0c1d2e;
+            border: 1px solid #173c55;
+            border-radius: 24px;
+            padding: 45px;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(53, 217, 255, 0.12);
+        }
+
+        .icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 22px;
+            border-radius: 50%;
+            background: #35d9ff;
+            color: #07111f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+        }
+
+        h1 {
+            color: #35d9ff;
+            margin-bottom: 12px;
+        }
+
+        .description {
+            color: #b7c8d9;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .upload-box {
+            border: 2px dashed #35d9ff;
+            border-radius: 18px;
+            padding: 35px 20px;
+            background: #07111f;
+            margin-bottom: 25px;
+        }
+
+        .upload-box p {
+            color: #b7c8d9;
+            margin-bottom: 18px;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            background: #0c1d2e;
+            color: white;
+            border: 1px solid #173c55;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #35d9ff;
+            color: #07111f;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(53, 217, 255, 0.22);
+        }
+
+        .error-message {
+            background: #28151a;
+            border: 1px solid #74313b;
+            color: #ff9ca8;
+            padding: 13px;
+            border-radius: 10px;
+            margin-bottom: 18px;
+        }
+
+        .security-note {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 12px;
+            background: #07111f;
+            color: #9eb3c5;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 22px;
+            color: #35d9ff;
+            text-decoration: none;
+        }
+
+        .back:hover {
+            text-decoration: underline;
+        }
+
+        .file-limit {
+            margin-top: 12px;
+            color: #7f9bad;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+
+        <div class="icon">
+            ↑
+        </div>
+
+        <h1>Secure File Upload</h1>
+
+        <p class="description">
+            Upload your important file and our system will
+            automatically generate a strong 24-character password.
+        </p>
+
+        <form method="POST" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            {% if error %}
+                <div class="error-message">
+                    ⚠️ {{ error }}
+                </div>
+            {% endif %}
+
+            <div class="upload-box">
+
+                <p>📁 Choose the file you want to protect</p>
+
+                <input
+                    type="file"
+                    name="file"
+                    id="fileInput"
+                    required
+                >
+
+                <div class="file-limit">
+                    Maximum file size: 24 MB
+                </div>
+
+            </div>
+
+            <button type="submit">
+                🔐 Upload & Generate Password
+            </button>
+
+        </form>
+
+        <div class="security-note">
+            🛡️ Your file is protected and a strong password
+            is generated automatically after successful upload.
+        </div>
+
+        <a class="back" href="/">
+            ← Back to Secure File App
+        </a>
+
+    </div>
+
+
+    <script>
+
+        const fileInput = document.getElementById("fileInput");
+
+        fileInput.addEventListener("change", function () {
+
+            const file = this.files[0];
+
+            if (file) {
+
+                const maxSize = 24 * 1024 * 1024;
+
+                if (file.size > maxSize) {
+
+                    alert(
+                        "⚠️ File is too large!\n\nMaximum allowed size is 24 MB."
+                    );
+
+                    this.value = "";
+
+                }
+
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>

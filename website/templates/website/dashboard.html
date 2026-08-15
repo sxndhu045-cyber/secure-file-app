@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Files | Secure File App</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #07111f;
+            color: white;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .header {
+            background: #0c1d2e;
+            border: 1px solid #173c55;
+            border-radius: 22px;
+            padding: 30px;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            color: #35d9ff;
+            margin-bottom: 10px;
+        }
+
+        .welcome {
+            color: #b7c8d9;
+        }
+
+        .top-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .top-buttons a {
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .upload-btn {
+            background: #35d9ff;
+            color: #07111f;
+        }
+
+        .home-btn {
+            border: 1px solid #35d9ff;
+            color: #35d9ff;
+        }
+
+        .files-title {
+            margin: 25px 0 15px;
+            color: #35d9ff;
+        }
+
+        .files {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .file-card {
+            background: #0c1d2e;
+            border: 1px solid #173c55;
+            border-radius: 20px;
+            padding: 22px;
+            transition: 0.25s;
+        }
+
+        .file-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(53, 217, 255, 0.10);
+        }
+
+        .file-icon {
+            font-size: 38px;
+            margin-bottom: 15px;
+        }
+
+        .file-name {
+            color: white;
+            font-weight: bold;
+            word-break: break-word;
+            margin-bottom: 10px;
+        }
+
+        .date {
+            color: #8fa5b8;
+            font-size: 13px;
+            margin-bottom: 18px;
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .actions a {
+            text-align: center;
+            text-decoration: none;
+            padding: 11px 8px;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .open {
+            background: #35d9ff;
+            color: #07111f;
+        }
+
+        .download {
+            border: 1px solid #35d9ff;
+            color: #35d9ff;
+        }
+
+        .share {
+            grid-column: 1 / -1;
+            background: #173c55;
+            color: white;
+        }
+
+        .empty {
+            text-align: center;
+            background: #0c1d2e;
+            border: 1px solid #173c55;
+            border-radius: 20px;
+            padding: 45px 20px;
+            color: #9eb3c5;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 18px;
+            }
+
+            .header {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>🔐 My Secure Files</h1>
+
+        <p class="welcome">
+            Welcome, {{ request.user.username }}!
+            Your protected files are shown below.
+        </p>
+
+        <div class="top-buttons">
+
+            <a href="{% url 'upload_file' %}" class="upload-btn">
+                📤 Upload New File
+            </a>
+
+            <a href="/" class="home-btn">
+                🏠 Home
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <h2 class="files-title">
+        📁 Your Files
+    </h2>
+
+
+    {% if files %}
+
+        <div class="files">
+
+            {% for file in files %}
+
+                <div class="file-card">
+
+                    <div class="file-icon">
+                        📄
+                    </div>
+
+                    <div class="file-name">
+                        {{ file.file.name }}
+                    </div>
+
+                    <div class="date">
+                        Uploaded:
+                        {{ file.uploaded_at|date:"d M Y, h:i A" }}
+                    </div>
+
+
+                    <div class="actions">
+
+                        <a
+                            href="{% url 'protected_file' file.id %}"
+                            class="open"
+                        >
+                            🔓 Open
+                        </a>
+
+
+                        <a
+                            href="{% url 'protected_file' file.id %}"
+                            class="download"
+                        >
+                            ⬇️ Download
+                        </a>
+
+
+                        <a
+                            href="{% url 'protected_file' file.id %}"
+                            class="share"
+                            onclick="shareFile(event, this.href)"
+                        >
+                            📤 Share
+                        </a>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="empty">
+
+            <h2>📂 No Files Yet</h2>
+
+            <p style="margin-top: 10px;">
+                Upload your first file to protect it with a
+                24-character password.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+
+<script>
+function shareFile(event, url) {
+
+    event.preventDefault();
+
+    if (navigator.share) {
+
+        navigator.share({
+            title: "Secure File",
+            text: "I shared a protected file with you. Use the password provided separately.",
+            url: window.location.origin + url
+        });
+
+    } else {
+
+        navigator.clipboard.writeText(
+            window.location.origin + url
+        );
+
+        alert("🔗 Secure file link copied!");
+
+    }
+}
+</script>
+
+</body>
+</html>

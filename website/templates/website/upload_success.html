@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Upload Successful | Secure File App</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #07111f;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 600px;
+            background: #0c1d2e;
+            border: 1px solid #173c55;
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(53, 217, 255, 0.12);
+        }
+
+        .success-icon {
+            width: 85px;
+            height: 85px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: #35d9ff;
+            color: #07111f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            animation: successGlow 1.8s infinite;
+        }
+
+        @keyframes successGlow {
+            0%, 100% {
+                box-shadow: 0 0 10px rgba(53, 217, 255, 0.2);
+            }
+
+            50% {
+                box-shadow: 0 0 30px rgba(53, 217, 255, 0.6);
+            }
+        }
+
+        h1 {
+            color: #35d9ff;
+            margin-bottom: 12px;
+        }
+
+        .description {
+            color: #b7c8d9;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .file-box,
+        .password-box {
+            background: #07111f;
+            border: 1px solid #173c55;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 18px;
+            word-break: break-word;
+        }
+
+        .label {
+            color: #35d9ff;
+            font-weight: bold;
+        }
+
+        .password {
+            margin-top: 12px;
+            padding: 14px;
+            background: #0c1d2e;
+            border: 1px dashed #35d9ff;
+            border-radius: 10px;
+            color: #35d9ff;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            word-break: break-all;
+        }
+
+        button,
+        .open-btn,
+        .home-btn {
+            width: 100%;
+            display: block;
+            padding: 15px;
+            margin-top: 12px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.25s;
+        }
+
+        .copy-btn {
+            border: none;
+            background: #35d9ff;
+            color: #07111f;
+        }
+
+        .open-btn {
+            background: #173c55;
+            color: #35d9ff;
+            border: 1px solid #35d9ff;
+        }
+
+        .home-btn {
+            background: #102b3e;
+            color: white;
+            border: 1px solid #27516b;
+        }
+
+        button:hover,
+        .open-btn:hover,
+        .home-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(53, 217, 255, 0.2);
+        }
+
+        .message {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            background: #0d3025;
+            border: 1px solid #25d89b;
+            color: #58f0bb;
+            font-weight: bold;
+        }
+
+        .warning {
+            margin-top: 22px;
+            padding: 15px;
+            border-radius: 12px;
+            background: #07111f;
+            color: #9eb3c5;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <div class="success-icon">
+        ✓
+    </div>
+
+    <h1>Upload Successful!</h1>
+
+    <p class="description">
+        Your file has been uploaded successfully
+        and protected with an automatic password.
+    </p>
+
+    <div class="file-box">
+        <span class="label">📁 File:</span>
+        <br><br>
+        {{ file.file.name }}
+    </div>
+
+    <div class="password-box">
+
+        <span class="label">
+            🔐 Your Secure Password
+        </span>
+
+        <div class="password" id="passwordText">
+            {{ password }}
+        </div>
+
+        <button
+            class="copy-btn"
+            onclick="copyPassword()"
+        >
+            📋 Copy Password
+        </button>
+
+        <div id="copyMessage" class="message">
+            ✅ Password copied successfully!
+        </div>
+
+    </div>
+
+    <a
+        class="open-btn"
+        href="{% url 'protected_file' file.id %}"
+    >
+        🔓 Open Protected File
+    </a>
+
+    <a
+        class="home-btn"
+        href="/"
+    >
+        🏠 Back to Home
+    </a>
+
+    <div class="warning">
+        🛡️ Keep this password safe. Anyone with the password
+        may be able to access the protected file.
+    </div>
+
+</div>
+
+
+<script>
+
+function copyPassword() {
+
+    const password =
+        document.getElementById("passwordText").innerText;
+
+    navigator.clipboard.writeText(password)
+        .then(function () {
+
+            const message =
+                document.getElementById("copyMessage");
+
+            message.style.display = "block";
+
+            setTimeout(function () {
+                message.style.display = "none";
+            }, 2500);
+
+        });
+
+}
+
+</script>
+
+</body>
+</html>

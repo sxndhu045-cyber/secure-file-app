@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Protected File | Secure File App</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top, #123452, #07111f 60%);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 620px;
+            background: rgba(12, 29, 46, 0.96);
+            border: 1px solid #173c55;
+            border-radius: 25px;
+            padding: 35px;
+            text-align: center;
+            box-shadow:
+                0 0 40px rgba(53, 217, 255, 0.12),
+                0 20px 50px rgba(0, 0, 0, 0.35);
+        }
+
+        .lock {
+            font-size: 58px;
+            margin-bottom: 12px;
+            animation: lockGlow 2s infinite;
+        }
+
+        @keyframes lockGlow {
+            0%, 100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 3px #35d9ff);
+            }
+
+            50% {
+                transform: scale(1.08);
+                filter: drop-shadow(0 0 18px #35d9ff);
+            }
+        }
+
+        h1 {
+            color: #35d9ff;
+            margin-bottom: 18px;
+        }
+
+        .file-box {
+            background: #07111f;
+            border: 1px solid #173c55;
+            border-radius: 15px;
+            padding: 18px;
+            margin: 20px 0;
+            word-break: break-word;
+        }
+
+        .file-box span {
+            color: #35d9ff;
+            font-weight: bold;
+        }
+
+        /* IMAGE PREVIEW */
+
+        .preview {
+            margin: 22px 0;
+        }
+
+        .preview img {
+            width: 100%;
+            max-height: 420px;
+            object-fit: contain;
+            border-radius: 18px;
+            border: 1px solid #173c55;
+            background: #07111f;
+            box-shadow: 0 0 25px rgba(53, 217, 255, 0.10);
+        }
+
+        .preview video {
+            width: 100%;
+            max-height: 420px;
+            border-radius: 18px;
+        }
+
+        .success {
+            color: #6fffc0;
+            margin: 18px 0;
+            font-weight: bold;
+            animation: successBlink 1.8s infinite;
+        }
+
+        @keyframes successBlink {
+            0%, 100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.55;
+            }
+        }
+
+        .error {
+            background: #28151a;
+            border: 1px solid #74313b;
+            color: #ff9ca8;
+            padding: 13px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        /* ALL ACTION BUTTONS */
+
+        .action-btn,
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: #35d9ff;
+            color: #07111f;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            margin-top: 12px;
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                background 0.2s ease;
+
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn:hover,
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow:
+                0 0 12px rgba(53, 217, 255, 0.8),
+                0 8px 25px rgba(53, 217, 255, 0.25);
+        }
+
+        .action-btn:active,
+        button:active {
+            transform: scale(0.96);
+        }
+
+        /* BLINK EFFECT */
+
+        .download-btn {
+            animation: buttonBlink 2s infinite;
+        }
+
+        @keyframes buttonBlink {
+            0%, 100% {
+                box-shadow: 0 0 5px rgba(53, 217, 255, 0.25);
+            }
+
+            50% {
+                box-shadow:
+                    0 0 20px rgba(53, 217, 255, 0.75),
+                    0 0 35px rgba(53, 217, 255, 0.25);
+            }
+        }
+
+        /* DOWNLOAD PROGRESS */
+
+        .progress-container {
+            display: none;
+            margin-top: 18px;
+            text-align: left;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            color: #b7c8d9;
+            font-size: 14px;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 12px;
+            background: #07111f;
+            border: 1px solid #173c55;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: #35d9ff;
+            border-radius: 20px;
+            transition: width 0.15s ease;
+            box-shadow: 0 0 12px rgba(53, 217, 255, 0.8);
+        }
+
+        .home {
+            display: inline-block;
+            margin-top: 23px;
+            color: #35d9ff;
+            text-decoration: none;
+        }
+
+        .home:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+
+            .card {
+                padding: 28px 18px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .preview img {
+                max-height: 350px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <div class="lock">
+        🔐
+    </div>
+
+    <h1>Protected File</h1>
+
+    <div class="file-box">
+        <span>File:</span>
+        <br><br>
+        {{ file.file.name }}
+    </div>
+
+
+    {% if error %}
+
+        <div class="error">
+            ❌ {{ error }}
+        </div>
+
+    {% endif %}
+
+
+    {% if unlocked %}
+
+        <div class="success">
+            ✅ File unlocked successfully
+        </div>
+
+
+        <!-- PREVIEW -->
+
+        <div class="preview">
+
+            {% if file.file.url|lower|slice:"-4:" == ".jpg" or file.file.url|lower|slice:"-5:" == ".jpeg" or file.file.url|lower|slice:"-4:" == ".png" or file.file.url|lower|slice:"-5:" == ".webp" %}
+
+                <img
+                    src="{{ file.file.url }}"
+                    alt="Protected Image"
+                >
+
+            {% elif file.file.url|lower|slice:"-4:" == ".mp4" %}
+
+                <video controls>
+                    <source src="{{ file.file.url }}">
+                    Your browser does not support video.
+                </video>
+
+            {% else %}
+
+                <p>
+                    This file type cannot be previewed here.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- DOWNLOAD -->
+
+        <button
+            type="button"
+            class="download-btn"
+            onclick="downloadFile()"
+            id="downloadButton"
+        >
+            ⬇️ Download File
+        </button>
+
+
+        <!-- PROGRESS -->
+
+        <div
+            class="progress-container"
+            id="progressContainer"
+        >
+
+            <div class="progress-text">
+
+                <span id="downloadStatus">
+                    Downloading...
+                </span>
+
+                <span id="downloadPercent">
+                    0%
+                </span>
+
+            </div>
+
+            <div class="progress-bar-bg">
+
+                <div
+                    class="progress-bar"
+                    id="progressBar"
+                ></div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SHARE -->
+
+        <button
+            type="button"
+            onclick="shareLink()"
+        >
+            📤 Share Link
+        </button>
+
+
+        <!-- COPY -->
+
+        <button
+            type="button"
+            onclick="copyLink()"
+        >
+            🔗 Copy Link
+        </button>
+
+
+    {% else %}
+
+
+        <!-- PASSWORD FORM -->
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                required
+            >
+
+            <button type="submit">
+                🔓 Unlock File
+            </button>
+
+        </form>
+
+
+    {% endif %}
+
+
+    <a
+        class="home"
+        href="/"
+    >
+        ← Back to Secure File App
+    </a>
+
+</div>
+
+
+<script>
+
+/* DOWNLOAD WITH PERCENTAGE */
+
+function downloadFile() {
+
+    const button = document.getElementById("downloadButton");
+    const progressContainer =
+        document.getElementById("progressContainer");
+
+    const progressBar =
+        document.getElementById("progressBar");
+
+    const progressPercent =
+        document.getElementById("downloadPercent");
+
+    const status =
+        document.getElementById("downloadStatus");
+
+    button.disabled = true;
+    button.innerText = "⬇️ Downloading...";
+
+    progressContainer.style.display = "block";
+
+    const xhr = new XMLHttpRequest();
+
+    xhr.open(
+        "GET",
+        "{% url 'download_file' file.id %}",
+        true
+    );
+
+    xhr.responseType = "blob";
+
+    xhr.onprogress = function(event) {
+
+        if (event.lengthComputable) {
+
+            const percent =
+                Math.round(
+                    (event.loaded / event.total) * 100
+                );
+
+            progressBar.style.width = percent + "%";
+
+            progressPercent.innerText =
+                percent + "%";
+
+            status.innerText =
+                "Downloading...";
+
+        } else {
+
+            status.innerText =
+                "Downloading...";
+
+        }
+    };
+
+
+    xhr.onload = function() {
+
+        if (xhr.status === 200) {
+
+            progressBar.style.width = "100%";
+            progressPercent.innerText = "100%";
+            status.innerText = "Download complete ✅";
+
+            const blob = xhr.response;
+
+            const url =
+                window.URL.createObjectURL(blob);
+
+            const a =
+                document.createElement("a");
+
+            a.href = url;
+
+            a.download =
+                "{{ file.file.name|escapejs }}";
+
+            document.body.appendChild(a);
+
+            a.click();
+
+            a.remove();
+
+            window.URL.revokeObjectURL(url);
+
+            button.disabled = false;
+
+            button.innerText =
+                "⬇️ Download Again";
+
+        } else {
+
+            status.innerText =
+                "Download failed ❌";
+
+            button.disabled = false;
+
+            button.innerText =
+                "⬇️ Download File";
+        }
+    };
+
+
+    xhr.onerror = function() {
+
+        status.innerText =
+            "Download failed ❌";
+
+        button.disabled = false;
+
+        button.innerText =
+            "⬇️ Download File";
+    };
+
+
+    xhr.send();
+}
+
+
+/* SHARE LINK */
+
+function shareLink() {
+
+    const shareData = {
+
+        title: "Secure File App",
+
+        text: "I am sharing a protected file with you.",
+
+        url: window.location.href
+    };
+
+
+    if (navigator.share) {
+
+        navigator.share(shareData)
+            .catch(function(error) {
+
+                console.log(
+                    "Share cancelled:",
+                    error
+                );
+
+            });
+
+    } else {
+
+        copyLink();
+
+        alert(
+            "Sharing is not supported here. Link copied instead."
+        );
+    }
+}
+
+
+/* COPY LINK */
+
+function copyLink() {
+
+    navigator.clipboard.writeText(
+        window.location.href
+    )
+    .then(function() {
+
+        alert(
+            "✅ Link copied successfully!"
+        );
+
+    })
+    .catch(function() {
+
+        alert(
+            "❌ Could not copy the link."
+        );
+
+    });
+}
+
+</script>
+
+</body>
+</html>
