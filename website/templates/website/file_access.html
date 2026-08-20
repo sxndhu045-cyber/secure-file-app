@@ -279,14 +279,10 @@
 
         <div class="preview">
 
-            {% if file.file.url|lower|slice:"-4:" == ".jpg" or file.file.url|lower|slice:"-5:" == ".jpeg" or file.file.url|lower|slice:"-4:" == ".png" or file.file.url|lower|slice:"-5:" == ".webp" %}
-
-                <img
-                    src="{{ file.file.url }}"
-                    alt="Protected Image"
-                >
-
-            {% elif file.file.url|lower|slice:"-4:" == ".mp4" %}
+            
+        {% if file.file %}
+            <img src="{{ file.file.url }}" alt="Protected Image">
+        {% elif file.file.url|lower|slice:"-4:" == ".mp4" %}
 
                 <video controls>
                     <source src="{{ file.file.url }}">
@@ -431,7 +427,7 @@ function downloadFile() {
 
     xhr.open(
         "GET",
-        "{% url 'download_file' file.id %}",
+        "{{ file.file.url }}",
         true
     );
 
@@ -541,18 +537,13 @@ function shareLink() {
 
 
     if (navigator.share) {
-
-        navigator.share(shareData)
-            .catch(function(error) {
-
-                console.log(
-                    "Share cancelled:",
-                    error
-                );
-
-            });
-
-    } else {
+    navigator.share({
+        title: document.title,
+        url: window.location.href
+    }).catch(function(error) {
+        console.log("Share cancelled:", error);
+    });
+} else {
 
         copyLink();
 
