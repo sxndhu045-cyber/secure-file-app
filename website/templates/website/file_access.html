@@ -525,58 +525,38 @@ function downloadFile() {
 /* SHARE LINK */
 
 function shareLink() {
-
-    const shareData = {
-
-        title: "Secure File App",
-
-        text: "I am sharing a protected file with you.",
-
-        url: window.location.href
-    };
-
+    const url = "https://secure-file-app-8laz.onrender.com/file/{{ file.id }}/";
 
     if (navigator.share) {
-    navigator.share({
-        title: document.title,
-        url: window.location.href
-    }).catch(function(error) {
-        console.log("Share cancelled:", error);
-    });
-} else {
-
-        copyLink();
-
-        alert(
-            "Sharing is not supported here. Link copied instead."
+        navigator.share({
+            title: "Protected File",
+            url: url
+        });
+    } else {
+        window.open(
+            "https://wa.me/?text=" + encodeURIComponent(url),
+            "_blank"
         );
     }
 }
 
-
 /* COPY LINK */
 
-function copyLink() {
+function shareLink() {
+    const url = "https://secure-file-app-8laz.onrender.com/file/{{ file.id }}/";
 
-    navigator.clipboard.writeText(
-        window.location.href
-    )
-    .then(function() {
-
-        alert(
-            "✅ Link copied successfully!"
+    if (navigator.share) {
+        navigator.share({
+            title: "Protected File",
+            url: url
+        });
+    } else {
+        window.open(
+            "https://wa.me/?text=" + encodeURIComponent(url),
+            "_blank"
         );
-
-    })
-    .catch(function() {
-
-        alert(
-            "❌ Could not copy the link."
-        );
-
-    });
+    }
 }
-
 </script>
 
 </body>
