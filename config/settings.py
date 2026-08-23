@@ -30,13 +30,10 @@ SECRET_KEY = 'django-insecure-=)t6)0#r3k_p+d#brt-&o=h@w!23^ft3^5*$u$i%%4)glh=ux(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False 
 
-ALLOWED_HOSTS = [
-    "secure-file-app-8laz.onrender.com",
-    "localhost",
-    "127.0.0.1",
-]
+ALLOWED_HOSTS = [*]
+
 CSRF_TRUSTED_ORIGINS = [
-    "https://secure-file-app-8laz.onrender.com",
+    "https://secure-file-app-j7fh.onrender.com"
 ]
 
 
