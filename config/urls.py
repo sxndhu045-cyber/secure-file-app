@@ -18,11 +18,17 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.http import HttpResponse
+
+def google_verification(request):
+    return HttpResponse("google-site-verification: google2361fa352673a6ae.html")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('website.urls')),
     path('account/', include('accounts.urls')),
+    path("google2361fa352673a6ae.html", google_verification),
+
 ]
 if settings.DEBUG:
     urlpatterns +=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
